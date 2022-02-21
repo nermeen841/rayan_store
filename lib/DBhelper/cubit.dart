@@ -94,7 +94,7 @@ class DataBaseCubit extends Cubit<DatabaseStates> {
     database.transaction((txn) async {
       txn
           .rawInsert(
-              'INSERT INTO cart( productId ,  productNameEn , productNameAr , productDescEn , productDescAr , productPrice , productQty , productImg, sizeId , colorId, , colorOption , sizeOption) VALUES("$productId", "$productNameEn", "$productNameAr" ,"$productDescEn", "$productDescAr","$productPrice", "$productQty", "$productImg", "$sizeId", "$colorId","$colorId", "$sizeOption")')
+              'INSERT INTO cart( productId ,  productNameEn , productNameAr , productDescEn , productDescAr , productPrice , productQty , productImg, sizeId , colorId, colorOption , sizeOption) VALUES("$productId", "$productNameEn", "$productNameAr" ,"$productDescEn", "$productDescAr","$productPrice", "$productQty", "$productImg", "$sizeId", "$colorId","$colorOption", "$sizeOption")')
           .then((value) {
         emit(InsertdatabaseState());
         for (var element in cart) {
