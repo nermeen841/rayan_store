@@ -4,29 +4,39 @@ import 'package:flutter/material.dart';
 import 'package:my_fatoorah/my_fatoorah.dart';
 import 'package:rayan_store/DBhelper/cubit.dart';
 import 'package:rayan_store/componnent/constants.dart';
+import 'package:rayan_store/componnent/http_services.dart';
 import 'package:rayan_store/generated/local_keys.dart';
 import 'package:rayan_store/screens/bottomnav/homeScreen.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:rayan_store/screens/orders/cubit/order_cubit.dart';
+import 'package:rayan_store/screens/orders/orders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 String mAPIKey =
     "GnU465_twWngnRHW5vL_oW6Y9-D8n2OqC-WxpOIvhQNYUkEQDT59thwVA6kb4627K1vFKJoPz-4DRu72vjWEuHZx_fb1PqoKlvCf5kyKS6E4z14_OZBp1ntT-U9_vXXI1DVR_xfvcL5G_wo7pMzLCGWs0hK9qFw0Sp7LpHOabU8rjokKKGfMQBNPzSXwUKIJFw9FoxzLA0zReS_chMUK2_F5yAfPIVnBsETA-6Jv8HJSEIrSE1f-ob7WI_-evjyWbNaYqT0mHWMOUFcsGGVwi49WnUXvJAsopIleFGdGdC1ExwsCLX6TMjuJDIaRrOtQpJ6XFxg7CpL_9fzWyycHQ1m18l9cqDEKphhx6EJIkLtV-WaTTQB5h-AmqwbWYDPguCEKygQO4ONHgBgIErxjkVUixl1iKCWfvMs5Jd43gxcNtgUZUiDbbfZVrQRi81X45DC1kqTO6lI4XGC7QSEUete72gIB_Ex5OXEvkjg273kSiGAHn04ChAu2nca6J2eF89AxHllbOx-wQDCWM-cdLfVOf0nRCzZ8VFZosgNX0E1rm7iKXDXQOnJs3m1En29C2QNiptTe2boZ-DdnKsW8IFGxuOmLjxHDG-WYtxWgHaCi-cdGt1pxREb7y0k69Cp0ip5gDGKxCPIo9o0Sc-YNefmz4M_b5CKRsADzhM0Uofkfg-hE";
 
 class PaymentScreen extends StatefulWidget {
   final String totalPrice;
+  final String orderId;
 
-  const PaymentScreen({Key? key, required this.totalPrice}) : super(key: key);
+  const PaymentScreen(
+      {Key? key, required this.totalPrice, required this.orderId})
+      : super(key: key);
   @override
   _PaymentScreenState createState() => _PaymentScreenState();
 }
 
 class _PaymentScreenState extends State<PaymentScreen> {
   String lang = '';
-
+  String token = '';
+  bool islogin = false;
   getLang() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       lang = preferences.getString('language').toString();
+      lang = preferences.getString('token') ?? '';
+      islogin = preferences.getBool('login') ?? false;
     });
   }
 
@@ -81,21 +91,40 @@ class _PaymentScreenState extends State<PaymentScreen> {
         },
         onResult: (res) async {
           if (res.isSuccess) {
+            try {
+              var response = await http.post(
+                  Uri.parse(EndPoints.CALL_BACK +
+                      "${widget.orderId}?paymentId=${res.paymentId}"),
+                  headers: {'auth-token': token, 'Content-Language': lang});
+              print(response.body);
+            } catch (error) {
+              print("call back error state : " + error.toString());
+            }
+
             print("success url : ---------" + res.url.toString());
-            DataBaseCubit.get(context).deleteTableContent();
-            DataBaseCubit.get(context).cart = [];
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => HomeScreen(index: 0)),
-                (route) => false);
+
+            if (islogin) {
+              DataBaseCubit.get(context).deleteTableContent();
+              DataBaseCubit.get(context).cart = [];
+              OrderCubit.get(context).getAllorders();
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => Orders()),
+                  (route) => false);
+            } else {
+              DataBaseCubit.get(context).deleteTableContent();
+              DataBaseCubit.get(context).cart = [];
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen(index: 0)),
+                  (route) => false);
+            }
 
             return null;
           }
           if (res.isError) {
             print("error url : ---------" + res.url.toString());
             Navigator.pop(context);
-
-            // customError(context, "there is an error");
           } else if (res.isNothing) {
             print("no thing url : ---------" + res.url.toString());
             Navigator.pop(context);

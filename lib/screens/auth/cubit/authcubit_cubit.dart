@@ -180,7 +180,8 @@ class AuthcubitCubit extends Cubit<AuthcubitState> {
         controller.success();
         await Future.delayed(const Duration(seconds: 1));
         controller.stop();
-        fireSmsResetPass(context, phone, controller);
+        fireSmsResetPass(
+            phone: phone, btnController: controller, context: context);
         emit(CheckPhoneSuccessState());
       } else {
         controller.error();

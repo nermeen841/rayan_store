@@ -25,15 +25,13 @@ class _SearchBodyState extends State<SearchBody> {
   bool isLoadMoreRunning = false;
   List searchData = [];
   String lang = '';
-  bool login = false;
   String token = '';
   TextEditingController search = TextEditingController();
   getLang() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       lang = preferences.getString('language').toString();
-      token = preferences.getString('token').toString();
-      login = preferences.getBool('login') ?? false;
+      token = preferences.getString('token') ?? '';
     });
   }
 

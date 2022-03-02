@@ -32,6 +32,7 @@ class HomeCubit extends Cubit<AppCubitStates> {
     }
   }
 
+///////////////////////////////////////////////////////////////////////////////////
   SingleProductModel? singleProductModel;
 
   void getProductdata({required String productId}) async {
@@ -50,6 +51,8 @@ class HomeCubit extends Cubit<AppCubitStates> {
       emit(SingleProductErrorState(error.toString()));
     }
   }
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   SingleProductColorModel? singleProductColorModel;
   void getProductColor(

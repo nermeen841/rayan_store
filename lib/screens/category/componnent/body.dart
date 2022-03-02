@@ -115,6 +115,9 @@ class _CategoryProductsState extends State<CategoryProducts> {
     var h = MediaQuery.of(context).size.height;
     return Column(
       children: [
+        SizedBox(
+          height: h * 0.03,
+        ),
         isFirstLoadRunning
             ? Center(
                 child: CircularProgressIndicator(
@@ -127,8 +130,9 @@ class _CategoryProductsState extends State<CategoryProducts> {
                         controller: scrollController,
                         itemCount: products.length,
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          childAspectRatio: 0.67,
-                          mainAxisSpacing: w * 0.01,
+                          childAspectRatio: 0.65,
+                          mainAxisSpacing: w * 0.08,
+                          crossAxisSpacing: h * 0.04,
                           crossAxisCount: 2,
                         ),
                         itemBuilder: (context, index) => InkWell(
@@ -305,8 +309,12 @@ class _CategoryProductsState extends State<CategoryProducts> {
           Container(
             padding: EdgeInsets.only(top: h * 0.01, bottom: h * 0.01),
             color: Colors.white,
-            child: const Center(
-              child: Text("No more products"),
+            child: Center(
+              child: Text(
+                LocalKeys.NO_MORE_PRODUCT.tr(),
+                style: TextStyle(
+                    fontFamily: (lang == 'en') ? 'Nunito' : 'Alamrai'),
+              ),
             ),
           ),
       ],

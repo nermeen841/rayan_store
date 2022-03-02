@@ -11,10 +11,9 @@ class DataBaseCubit extends Cubit<DatabaseStates> {
 
   late Database database;
   List<Map> cart = [];
-
-  int finalPrice = 0;
   int quantity = 0;
   Map<int, int> counter = {};
+  Map<int, bool> isexist = {};
   void createDb() {
     openDatabase('cart.db', version: 1, onCreate: (database, version) {
       database
@@ -34,20 +33,20 @@ class DataBaseCubit extends Cubit<DatabaseStates> {
 
   getfromDataBase(database) {
     emit(LoadingDatafromDatabase());
-    database.rawQuery('SELECT * FROM cart').then((value) {
-      cart = value;
-      for (var element in value) {
-        finalPrice = finalPrice +
-            (int.parse(element['productQty'].toString()) *
-                int.parse(element['productPrice'].toString()));
-        counter[element['productId']] = element['productQty'];
-      }
+    database.rawQuery('SELECT * FROM cart').then(
+      (value) {
+        cart = value;
 
-      for (var element in value) {
-        quantity = quantity + (int.parse(element['productQty'].toString()));
-      }
-      emit(GetdatabaseState());
-    });
+        for (var element in value) {
+          counter[element['productId']] = element['productQty'];
+          isexist[element['productId']] = true;
+        }
+        for (var element in value) {
+          quantity = quantity + (int.parse(element['productQty'].toString()));
+        }
+        emit(GetdatabaseState());
+      },
+    );
   }
 
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -62,12 +61,14 @@ class DataBaseCubit extends Cubit<DatabaseStates> {
       print("error updating dataaaaaaaaaaaaaaaaaaaa" + error.toString());
     });
   }
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 
   deletaFromDB({required int id}) {
     database.rawDelete('DELETE FROM cart WHERE productId = ?', ['$id']).then(
         (value) {
       getfromDataBase(database);
+      isexist[id] = false;
       emit(DeletedatabaseState());
       print("item daleted successfulllllllllly");
     }).catchError((error) {
@@ -97,19 +98,13 @@ class DataBaseCubit extends Cubit<DatabaseStates> {
               'INSERT INTO cart( productId ,  productNameEn , productNameAr , productDescEn , productDescAr , productPrice , productQty , productImg, sizeId , colorId, colorOption , sizeOption) VALUES("$productId", "$productNameEn", "$productNameAr" ,"$productDescEn", "$productDescAr","$productPrice", "$productQty", "$productImg", "$sizeId", "$colorId","$colorOption", "$sizeOption")')
           .then((value) {
         emit(InsertdatabaseState());
-        for (var element in cart) {
-          finalPrice = finalPrice +
-              (int.parse(element['productQty'].toString()) *
-                  int.parse(element['productPrice'].toString()));
-          emit(TotalPriceState());
-        }
 
         for (var element in cart) {
           quantity = quantity + (int.parse(element['productQty'].toString()));
           counter[element['productId']] = quantity;
+          isexist[element['productId']] = true;
           emit(TotalQuantityState());
         }
-
         getfromDataBase(database);
         print("item addedd successfulllllllllly");
         emit(GetdatabaseState());
@@ -125,9 +120,9 @@ class DataBaseCubit extends Cubit<DatabaseStates> {
   deleteTableContent() {
     database.delete("cart").then((value) {
       cart = [];
-      finalPrice = 0;
       quantity = 0;
       counter = {};
+      isexist = {};
       emit(DeleteTablecontentDatabase());
       print("table content deleted successfulllllllllly");
     }).catchError((error) {

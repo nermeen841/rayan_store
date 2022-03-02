@@ -54,7 +54,7 @@ class CodegenLoader extends AssetLoader {
     "delivery_add": "عنوان الشحن",
     "size": "المقاس",
     "color": "اللون",
-    "detail_title": "Rayan Store أفضل مكان للشراء والشحن",
+    "detail_title": "ريان استور أفضل مكان للتسوق",
     "add_cart": "اضف الي السلة",
     "price": "السعر",
     "add_cobon": "اضف كوبون",
@@ -99,7 +99,16 @@ class CodegenLoader extends AssetLoader {
     "exit_app": "إغلاق التطبيق",
     "exit_title": "متاكد من إغلاق التطبيق ؟",
     "yes": "نعم",
-    "no": "لا"
+    "no": "لا",
+    "days": "أيام",
+    "valid_email": "البريد الإلكتروني غير صحيح",
+    "valid_phone": "رقم الهاتف غير صحيح",
+    "valid": "هذا الحقل مطلوب",
+    "attribute": "يجب اختيار المقاس واللون",
+    "remove_cart": "حذف من السلة",
+    "remove_item": "تم حذف المنتج من السلة",
+    "qty": "الكمية",
+    "no_product_more": "لا يوجد مزيد من المنتجات"
   };
   static const Map<String, dynamic> en = {
     "choose_lang": "Choose Language",
@@ -187,7 +196,16 @@ class CodegenLoader extends AssetLoader {
     "exit_app": "Exit App",
     "exit_title": "Are you sure you want to exit App",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "days": "DAYS",
+    "valid_email": "Enter valid email",
+    "valid_phone": "Enter valid phone",
+    "valid": "field is required",
+    "attribute": "Choose attribute first",
+    "remove_cart": "Remove from Cart",
+    "remove_item": "Product removed from your cart",
+    "qty": "Quantity",
+    "no_product_more": "No more product"
   };
   static const Map<String, Map<String, dynamic>> mapLocales = {
     "ar": ar,

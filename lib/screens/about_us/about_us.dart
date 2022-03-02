@@ -110,12 +110,24 @@ class _AboutUsState extends State<AboutUs> {
                                                   .singleItemModel!
                                                   .data!
                                                   .pageDetailsEn!,
+                                              style: TextStyle(
+                                                height: w * 0.005,
+                                                fontFamily: (lang == 'en')
+                                                    ? 'Nunito'
+                                                    : 'Almarai',
+                                              ),
                                             )
                                           : Text(
                                               UserprofileCubit.get(context)
                                                   .singleItemModel!
                                                   .data!
                                                   .pageDetailsAr!,
+                                              style: TextStyle(
+                                                height: w * 0.005,
+                                                fontFamily: (lang == 'en')
+                                                    ? 'Nunito'
+                                                    : 'Almarai',
+                                              ),
                                             )
                                     ],
                                   )

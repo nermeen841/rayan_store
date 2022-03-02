@@ -1,10 +1,8 @@
 // ignore_for_file: use_key_in_widget_constructors, deprecated_member_use, avoid_print
 
-import 'dart:io';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:rayan_store/app_cubit/app_cubit.dart';
 import 'package:rayan_store/app_cubit/appstate.dart';
 import 'package:rayan_store/componnent/constants.dart';
@@ -79,41 +77,64 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             SizedBox(
                               height: h * 0.04,
                             ),
-                            Center(
-                              child: Stack(
-                                children: [
-                                  Center(
-                                    child: CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: w * 0.15,
-                                      backgroundImage: const AssetImage(
-                                          "assets/icons/successful-business-woman.jpg"),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        top: h * 0.1,
-                                        left: w * 0.35,
-                                        right: w * 0.12),
-                                    child: Align(
-                                      alignment:
-                                          AlignmentDirectional.bottomCenter,
-                                      child: InkWell(
-                                        onTap: () async {
-                                          getImage();
-                                        },
-                                        child: CircleAvatar(
-                                          radius: w * 0.04,
-                                          backgroundColor: Colors.white,
-                                          child: Image.asset(
-                                              "assets/icons/Path-20.png"),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                            (isLogin)
+                                ? Center(
+                                    child: BlocConsumer<AppCubit,
+                                            AppCubitStates>(
+                                        builder: (context, state) => Stack(
+                                              children: [
+                                                Center(
+                                                  child: (AppCubit.get(context)
+                                                              .image ==
+                                                          null)
+                                                      ? CircleAvatar(
+                                                          backgroundColor:
+                                                              Colors.white,
+                                                          radius: w * 0.15,
+                                                          backgroundImage:
+                                                              const AssetImage(
+                                                                  "assets/icons/successful-business-woman.jpg"),
+                                                        )
+                                                      : CircleAvatar(
+                                                          backgroundColor:
+                                                              Colors.white,
+                                                          radius: w * 0.15,
+                                                          backgroundImage:
+                                                              FileImage(
+                                                            AppCubit.get(
+                                                                    context)
+                                                                .image!,
+                                                          ),
+                                                        ),
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top: h * 0.1,
+                                                      left: w * 0.35,
+                                                      right: w * 0.12),
+                                                  child: Align(
+                                                    alignment:
+                                                        AlignmentDirectional
+                                                            .bottomCenter,
+                                                    child: InkWell(
+                                                      onTap: () async {
+                                                        AppCubit.get(context)
+                                                            .getImage();
+                                                      },
+                                                      child: CircleAvatar(
+                                                        radius: w * 0.04,
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        child: Image.asset(
+                                                            "assets/icons/Path-20.png"),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                        listener: (context, state) {}))
+                                : Container(),
                             SizedBox(
                               height: h * 0.03,
                             ),
@@ -369,21 +390,5 @@ class _ProfileScreenState extends State<ProfileScreen> {
               },
               listener: (context, state) {})),
     );
-  }
-
-  late File image;
-  String image1 = "";
-
-  Future getImage() async {
-    ImagePicker picker = ImagePicker();
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
-    setState(() {
-      if (pickedFile != null) {
-        image1 = pickedFile.path;
-        image = File(pickedFile.path);
-      } else {
-        print('No image selected.');
-      }
-    });
   }
 }

@@ -14,10 +14,13 @@ import 'package:rayan_store/componnent/http_services.dart';
 import 'package:rayan_store/generated/local_keys.dart';
 
 import 'package:rayan_store/screens/cart/cart.dart';
+import 'package:rayan_store/screens/cart/cubit/cart_cubit.dart';
 import 'package:rayan_store/screens/favourite_screen/cubit/favourite_cubit.dart';
 import 'package:rayan_store/screens/product_detail/full_slider.dart';
 import 'package:rayan_store/screens/tabone_screen/cubit/home_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'componnent/add_to_cart.dart';
 
 class ProductDetail extends StatefulWidget {
   @override
@@ -39,10 +42,11 @@ class _ProductDetailState extends State<ProductDetail> {
   }
 
   size() {
+    count = 1;
     AppCubit.get(context).sizeselected = null;
-    AppCubit.get(context).sizeSelection(selected: null);
+    AppCubit.get(context).sizeSelection(selected: null, title: null);
     AppCubit.get(context).colorselected = null;
-    AppCubit.get(context).colorSelection(selected: null);
+    AppCubit.get(context).colorSelection(selected: null, title: null);
   }
 
   @override
@@ -67,15 +71,13 @@ class _ProductDetailState extends State<ProductDetail> {
             builder: (context, state) {
               return ConditionalBuilder(
                   condition: state is! SingleProductLoaedingState,
-                  builder: (context) => ListView(
-                        primary: true,
-                        shrinkWrap: true,
+                  builder: (context) => Stack(
                         children: [
                           Stack(
                             children: [
                               SizedBox(
                                 width: w,
-                                height: h * 0.6,
+                                height: h * 0.4,
                                 child: Swiper(
                                   pagination: const SwiperPagination(
                                       builder: DotSwiperPaginationBuilder(
@@ -95,7 +97,7 @@ class _ProductDetailState extends State<ProductDetail> {
                                                         .data!
                                                         .images![i]
                                                         .img!),
-                                            fit: BoxFit.fitWidth,
+                                            fit: BoxFit.cover,
                                           ),
                                         ),
                                       ),
@@ -133,582 +135,231 @@ class _ProductDetailState extends State<ProductDetail> {
                               ),
                               InkWell(
                                 onTap: () => Navigator.pop(context),
-                                child: Icon(
-                                  Icons.arrow_back_ios,
-                                  color: mainColor,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: w * 0.02),
+                                  child: Icon(
+                                    Icons.arrow_back_ios,
+                                    color: mainColor,
+                                    size: w * 0.09,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: h * 0.02,
-                          ),
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: h * 0.01, horizontal: w * 0.01),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                (lang == 'en')
-                                    ? Text(
-                                        HomeCubit.get(context)
-                                            .singleProductModel!
-                                            .data!
-                                            .titleEn!,
-                                        style: TextStyle(
-                                            fontFamily: (lang == 'en')
-                                                ? 'Nunito'
-                                                : 'Almarai',
-                                            fontSize: w * 0.04,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      )
-                                    : Text(
-                                        HomeCubit.get(context)
-                                            .singleProductModel!
-                                            .data!
-                                            .titleAr!,
-                                        style: TextStyle(
-                                            fontFamily: (lang == 'en')
-                                                ? 'Nunito'
-                                                : 'Almarai',
-                                            fontSize: w * 0.04,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.black),
-                                      ),
-                                BlocConsumer<FavouriteCubit, FavouriteState>(
-                                    builder: (context, state) {
-                                      return InkWell(
-                                        onTap: () {
-                                          if (login) {
-                                            FavouriteCubit.get(context)
-                                                .addtowishlist(
-                                                    productId:
-                                                        HomeCubit.get(context)
-                                                            .singleProductModel!
-                                                            .data!
-                                                            .id
-                                                            .toString());
-                                          } else {
-                                            Fluttertoast.showToast(
-                                                msg: LocalKeys.MUST_LOGIN.tr(),
-                                                backgroundColor: Colors.red,
-                                                textColor: Colors.white,
-                                                gravity: ToastGravity.TOP,
-                                                toastLength: Toast.LENGTH_LONG);
-                                          }
-                                        },
-                                        child: (FavouriteCubit.get(context)
-                                                        .isFavourite[
-                                                    int.parse(
-                                                        HomeCubit.get(context)
-                                                            .singleProductModel!
-                                                            .data!
-                                                            .id!
-                                                            .toString())] ==
-                                                true)
-                                            ? Icon(
-                                                Icons.favorite,
-                                                color: mainColor,
-                                              )
-                                            : Icon(
-                                                Icons.favorite_outline,
-                                                color: mainColor,
-                                              ),
-                                      );
-                                    },
-                                    listener: (context, state) {}),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: w * 0.01),
-                            child: (lang == 'en')
-                                ? Text(
-                                    HomeCubit.get(context)
-                                        .singleProductModel!
-                                        .data!
-                                        .descriptionEn!,
-                                    style: TextStyle(
-                                        fontFamily: (lang == 'en')
-                                            ? 'Nunito'
-                                            : 'Almarai',
-                                        fontSize: w * 0.04,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black),
-                                  )
-                                : Text(
-                                    HomeCubit.get(context)
-                                        .singleProductModel!
-                                        .data!
-                                        .descriptionAr!,
-                                    style: TextStyle(
-                                        fontFamily: (lang == 'en')
-                                            ? 'Nunito'
-                                            : 'Almarai',
-                                        fontSize: w * 0.04,
-                                        fontWeight: FontWeight.w400,
-                                        color: Colors.black),
-                                  ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: h * 0.03, horizontal: w * 0.01),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  LocalKeys.SIZE.tr(),
-                                  style: TextStyle(
-                                      fontFamily:
-                                          (lang == 'en') ? 'Nunito' : 'Almarai',
-                                      fontSize: w * 0.04,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
+                            padding: EdgeInsets.only(top: h * 0.39),
+                            child: Container(
+                              height: h,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(w * 0.045),
+                                  topRight: Radius.circular(w * 0.04),
                                 ),
-                                InkWell(
-                                  onTap: () {
-                                    homeBottomSheet(
-                                        context: context,
-                                        child: Column(
-                                          children: [
-                                            SizedBox(
-                                              height: h * 0.03,
-                                            ),
-                                            Center(
-                                              child: Text(
-                                                LocalKeys.SIZE.tr(),
-                                                style: TextStyle(
-                                                    fontFamily: (lang == 'en')
-                                                        ? 'Nunito'
-                                                        : 'Almarai',
-                                                    fontSize: w * 0.05,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.black),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              height: h * 0.02,
-                                            ),
-                                            BlocConsumer<AppCubit,
-                                                    AppCubitStates>(
-                                                builder: (context, state) {
-                                                  return ListView.builder(
-                                                      primary: true,
-                                                      shrinkWrap: true,
-                                                      itemCount: HomeCubit.get(
-                                                              context)
-                                                          .singleProductModel!
-                                                          .data!
-                                                          .sizes!
-                                                          .length,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return Padding(
-                                                          padding: EdgeInsets
-                                                              .symmetric(
-                                                                  horizontal:
-                                                                      h * 0.02),
-                                                          child: Row(
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment
-                                                                    .start,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceBetween,
-                                                            children: [
-                                                              Radio(
-                                                                  activeColor:
-                                                                      mainColor,
-                                                                  value: index,
-                                                                  groupValue: AppCubit
-                                                                          .get(
-                                                                              context)
-                                                                      .sizeselected,
-                                                                  onChanged:
-                                                                      (value) async {
-                                                                    SharedPreferences
-                                                                        prefs =
-                                                                        await SharedPreferences
-                                                                            .getInstance();
-                                                                    prefs
-                                                                        .setString(
-                                                                      'size_id',
-                                                                      HomeCubit.get(
-                                                                              context)
-                                                                          .singleProductModel!
-                                                                          .data!
-                                                                          .sizes![
-                                                                              index]
-                                                                          .id
-                                                                          .toString(),
-                                                                    );
-                                                                    prefs.setString(
-                                                                        'sizeOption',
-                                                                        HomeCubit.get(context)
-                                                                            .singleProductModel!
-                                                                            .data!
-                                                                            .sizes![index]
-                                                                            .pivot!
-                                                                            .id
-                                                                            .toString());
-                                                                    AppCubit.get(
-                                                                            context)
-                                                                        .sizeselected = index;
-                                                                    AppCubit.get(
-                                                                            context)
-                                                                        .sizeSelection(
-                                                                            selected:
-                                                                                index);
-                                                                    HomeCubit.get(
-                                                                            context)
-                                                                        .getProductColor(
-                                                                      context:
-                                                                          context,
-                                                                      productId: HomeCubit.get(
-                                                                              context)
-                                                                          .singleProductModel!
-                                                                          .data!
-                                                                          .id
-                                                                          .toString(),
-                                                                      sizeId: HomeCubit.get(
-                                                                              context)
-                                                                          .singleProductModel!
-                                                                          .data!
-                                                                          .sizes![
-                                                                              index]
-                                                                          .id
-                                                                          .toString(),
-                                                                    );
-                                                                  }),
-                                                              Text(
-                                                                HomeCubit.get(
-                                                                        context)
-                                                                    .singleProductModel!
-                                                                    .data!
-                                                                    .sizes![
-                                                                        index]
-                                                                    .name!,
-                                                                style: TextStyle(
-                                                                    fontFamily: (lang ==
-                                                                            'en')
-                                                                        ? 'Nunito'
-                                                                        : 'Almarai',
-                                                                    fontSize: w *
-                                                                        0.04,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold,
-                                                                    color: Colors
-                                                                        .grey),
-                                                              )
-                                                            ],
-                                                          ),
-                                                        );
-                                                      });
-                                                },
-                                                listener: (context, state) {})
-                                          ],
-                                        ));
-                                  },
-                                  child: Row(
+                              ),
+                              child: ListView(
+                                primary: true,
+                                shrinkWrap: true,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: h * 0.03, horizontal: w * 0.01),
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        "",
-                                        style: TextStyle(
-                                            fontFamily: (lang == 'en')
-                                                ? 'Nunito'
-                                                : 'Almarai',
-                                            fontSize: w * 0.04,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.grey),
-                                      ),
-                                      Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: Colors.black,
-                                        size: w * 0.08,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: h * 0.03, horizontal: w * 0.01),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  LocalKeys.COLOR.tr(),
-                                  style: TextStyle(
-                                      fontFamily:
-                                          (lang == 'en') ? 'Nunito' : 'Almarai',
-                                      fontSize: w * 0.04,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black),
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    homeBottomSheet(
-                                        context: context,
-                                        child: BlocConsumer<HomeCubit,
-                                                AppCubitStates>(
-                                            builder: (context, state) {
-                                              return ConditionalBuilder(
-                                                condition: state
-                                                    is! SingleProductColorLoaedingState,
-                                                builder: (context) => Column(
-                                                  children: [
-                                                    SizedBox(
-                                                      height: h * 0.03,
-                                                    ),
-                                                    Center(
-                                                      child: Text(
-                                                        LocalKeys.COLOR.tr(),
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                'Nunito',
-                                                            fontSize: w * 0.05,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color:
-                                                                Colors.black),
-                                                      ),
-                                                    ),
-                                                    SizedBox(
-                                                      height: h * 0.02,
-                                                    ),
-                                                    BlocConsumer<AppCubit,
-                                                            AppCubitStates>(
-                                                        builder:
-                                                            (context, state) {
-                                                          return ListView
-                                                              .builder(
-                                                                  primary: true,
-                                                                  shrinkWrap:
-                                                                      true,
-                                                                  itemCount: HomeCubit
-                                                                          .get(
-                                                                              context)
-                                                                      .singleProductColorModel!
-                                                                      .data!
-                                                                      .length,
-                                                                  itemBuilder:
-                                                                      (context,
-                                                                          index) {
-                                                                    return Padding(
-                                                                      padding: EdgeInsets.symmetric(
-                                                                          horizontal:
-                                                                              h * 0.02),
-                                                                      child:
-                                                                          Row(
-                                                                        crossAxisAlignment:
-                                                                            CrossAxisAlignment.start,
-                                                                        mainAxisAlignment:
-                                                                            MainAxisAlignment.spaceBetween,
-                                                                        children: [
-                                                                          Radio(
-                                                                              activeColor: mainColor,
-                                                                              value: index,
-                                                                              groupValue: AppCubit.get(context).colorselected,
-                                                                              onChanged: (value) async {
-                                                                                SharedPreferences prefs = await SharedPreferences.getInstance();
-                                                                                prefs.setString('color_id', HomeCubit.get(context).singleProductColorModel!.data![index].heightId.toString());
-                                                                                prefs.setString('colorOption', HomeCubit.get(context).singleProductColorModel!.data![index].id.toString());
-                                                                                AppCubit.get(context).colorselected = index;
-                                                                                AppCubit.get(context).colorSelection(selected: index);
-                                                                              }),
-                                                                          Text(
-                                                                            HomeCubit.get(context).singleProductColorModel!.data![index].name!,
-                                                                            style: TextStyle(
-                                                                                fontFamily: 'Nunito',
-                                                                                fontSize: w * 0.04,
-                                                                                fontWeight: FontWeight.bold,
-                                                                                color: Colors.grey),
-                                                                          )
-                                                                        ],
-                                                                      ),
-                                                                    );
-                                                                  });
-                                                        },
-                                                        listener:
-                                                            (context, state) {})
-                                                  ],
-                                                ),
-                                                fallback: (context) => Center(
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                    color: mainColor,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                            listener: (context, state) {}));
-                                  },
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        "",
-                                        style: TextStyle(
-                                            fontFamily: 'Nunito',
-                                            fontSize: w * 0.04,
-                                            fontWeight: FontWeight.w400,
-                                            color: Colors.grey),
-                                      ),
-                                      Icon(
-                                        Icons.keyboard_arrow_down,
-                                        color: Colors.black,
-                                        size: w * 0.08,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: h * 0.09),
-                            child: Column(
-                              children: [
-                                Align(
-                                  alignment: AlignmentDirectional.bottomCenter,
-                                  child: Center(
-                                    child: Text(
-                                      LocalKeys.DETAIL_TITLE.tr(),
-                                      style: TextStyle(
-                                          fontFamily: (lang == 'en')
-                                              ? 'Nunito'
-                                              : 'Almarai',
-                                          fontSize: w * 0.04,
-                                          color: mainColor,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: h * 0.02,
-                                ),
-                                Align(
-                                  alignment: AlignmentDirectional.bottomEnd,
-                                  child: Container(
-                                    width: w,
-                                    height: h * 0.2,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: w * 0.04,
-                                        vertical: h * 0.03),
-                                    decoration: BoxDecoration(
-                                        color: Colors.black,
-                                        borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(w * 0.07),
-                                          topRight: Radius.circular(w * 0.07),
-                                        )),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          LocalKeys.PRICE.tr(),
-                                          style: TextStyle(
-                                              color: mainColor,
-                                              fontFamily: (lang == 'en')
-                                                  ? 'Nunito'
-                                                  : 'Almarai',
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: w * 0.05),
-                                        ),
-                                        Row(
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: h * 0.01,
+                                            horizontal: w * 0.01),
+                                        child: Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              "${HomeCubit.get(context).singleProductModel!.data!.price!}"
-                                                      " " +
-                                                  currency,
-                                              style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: (lang == 'en')
-                                                      ? 'Nunito'
-                                                      : 'Almarai',
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: w * 0.05),
-                                            ),
-                                            BlocConsumer<DataBaseCubit,
-                                                    DatabaseStates>(
+                                            (lang == 'en')
+                                                ? Text(
+                                                    HomeCubit.get(context)
+                                                        .singleProductModel!
+                                                        .data!
+                                                        .titleEn!,
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            (lang == 'en')
+                                                                ? 'Nunito'
+                                                                : 'Almarai',
+                                                        fontSize: w * 0.04,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black),
+                                                  )
+                                                : Text(
+                                                    HomeCubit.get(context)
+                                                        .singleProductModel!
+                                                        .data!
+                                                        .titleAr!,
+                                                    style: TextStyle(
+                                                        fontFamily:
+                                                            (lang == 'en')
+                                                                ? 'Nunito'
+                                                                : 'Almarai',
+                                                        fontSize: w * 0.04,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.black),
+                                                  ),
+                                            favouriteButton(
+                                                context: context,
+                                                login: login,
+                                                productId:
+                                                    HomeCubit.get(context)
+                                                        .singleProductModel!
+                                                        .data!
+                                                        .id
+                                                        .toString()),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: w * 0.01),
+                                        child: (lang == 'en')
+                                            ? Text(
+                                                HomeCubit.get(context)
+                                                    .singleProductModel!
+                                                    .data!
+                                                    .descriptionEn!,
+                                                style: TextStyle(
+                                                    fontFamily: (lang == 'en')
+                                                        ? 'Nunito'
+                                                        : 'Almarai',
+                                                    fontSize: w * 0.04,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.black),
+                                              )
+                                            : Text(
+                                                HomeCubit.get(context)
+                                                    .singleProductModel!
+                                                    .data!
+                                                    .descriptionAr!,
+                                                style: TextStyle(
+                                                    fontFamily: (lang == 'en')
+                                                        ? 'Nunito'
+                                                        : 'Almarai',
+                                                    fontSize: w * 0.04,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.black),
+                                              ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: h * 0.03,
+                                  ),
+                                  sizeColorSelection(
+                                      context: context,
+                                      w: w,
+                                      h: h,
+                                      lang: lang,
+                                      size: HomeCubit.get(context)
+                                          .singleProductModel!
+                                          .data!
+                                          .sizes!,
+                                      productId: HomeCubit.get(context)
+                                          .singleProductModel!
+                                          .data!
+                                          .id
+                                          .toString()),
+                                  SizedBox(
+                                    height: h * 0.03,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            EdgeInsets.only(top: h * 0.015),
+                                        child: Text(
+                                          LocalKeys.QTY.tr(),
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: (lang == 'en')
+                                                  ? 'Nunito'
+                                                  : 'Almarai',
+                                              fontSize: w * 0.04),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: w * 0.03,
+                                      ),
+                                      BlocConsumer<DataBaseCubit,
+                                              DatabaseStates>(
+                                          builder: (context, state) {
+                                            return Container(
+                                              width: w * 0.4,
+                                              height: h * 0.055,
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: w * 0.015),
+                                              decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        w * 0.05),
+                                              ),
+                                              child: BlocConsumer<CartCubit,
+                                                  CartState>(
                                                 builder: (context, state) =>
+                                                    Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
                                                     InkWell(
                                                       onTap: () async {
                                                         SharedPreferences
                                                             prefs =
                                                             await SharedPreferences
                                                                 .getInstance();
-
                                                         if (AppCubit.get(
                                                                         context)
-                                                                    .colorselected ==
+                                                                    .sizeselected !=
                                                                 null ||
                                                             AppCubit.get(
                                                                         context)
-                                                                    .sizeselected ==
+                                                                    .colorselected !=
                                                                 null) {
-                                                          Fluttertoast.showToast(
-                                                              backgroundColor:
-                                                                  Colors.black,
-                                                              gravity:
-                                                                  ToastGravity
-                                                                      .TOP,
-                                                              toastLength: Toast
-                                                                  .LENGTH_LONG,
-                                                              msg:
-                                                                  "Choose attribute first");
+                                                          if (state
+                                                              is CheckProductAddcartSuccessState) {
+                                                            setState(() {
+                                                              count++;
+                                                            });
+                                                          }
+                                                          CartCubit.get(context).checkProductQty(
+                                                              context: context,
+                                                              productId: HomeCubit
+                                                                      .get(
+                                                                          context)
+                                                                  .singleProductModel!
+                                                                  .data!
+                                                                  .id
+                                                                  .toString(),
+                                                              productQty: count
+                                                                  .toString(),
+                                                              sizeId: prefs
+                                                                  .getString(
+                                                                      'size_id')
+                                                                  .toString(),
+                                                              colorId: prefs
+                                                                  .getString(
+                                                                      'color_id')
+                                                                  .toString());
                                                         } else {
-                                                          DataBaseCubit.get(context).inserttoDatabase(
-                                                              sizeOption: int.parse(prefs
-                                                                  .getString(
-                                                                      'sizeOption')
-                                                                  .toString()),
-                                                              colorOption: int.parse(prefs
-                                                                  .getString(
-                                                                      'colorOption')
-                                                                  .toString()),
-                                                              productId: HomeCubit.get(context)
-                                                                  .singleProductModel!
-                                                                  .data!
-                                                                  .id!,
-                                                              productNameEn: HomeCubit.get(context)
-                                                                  .singleProductModel!
-                                                                  .data!
-                                                                  .titleEn!,
-                                                              productNameAr:
-                                                                  HomeCubit.get(context)
-                                                                      .singleProductModel!
-                                                                      .data!
-                                                                      .titleAr!,
-                                                              productDescEn: HomeCubit.get(context)
-                                                                  .singleProductModel!
-                                                                  .data!
-                                                                  .descriptionEn!,
-                                                              productDescAr: HomeCubit.get(context)
-                                                                  .singleProductModel!
-                                                                  .data!
-                                                                  .descriptionAr!,
-                                                              productQty: 1,
-                                                              productPrice: HomeCubit.get(context)
-                                                                  .singleProductModel!
-                                                                  .data!
-                                                                  .price,
-                                                              productImg: HomeCubit.get(context)
-                                                                  .singleProductModel!
-                                                                  .data!
-                                                                  .img!,
-                                                              sizeId: int.parse(prefs.getString('size_id').toString()),
-                                                              colorId: int.parse(prefs.getString('color_id').toString()));
                                                           Fluttertoast.showToast(
                                                               backgroundColor:
                                                                   Colors.black,
@@ -718,57 +369,60 @@ class _ProductDetailState extends State<ProductDetail> {
                                                               toastLength: Toast
                                                                   .LENGTH_LONG,
                                                               msg: LocalKeys
-                                                                  .ADD_CAR
+                                                                  .ATTRIBUTES
                                                                   .tr());
-                                                          Navigator.pushReplacement(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          const Cart()));
                                                         }
                                                       },
-                                                      child: Container(
-                                                        width: w * 0.35,
-                                                        height: h * 0.07,
-                                                        decoration: BoxDecoration(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(w *
-                                                                        0.02),
-                                                            border: Border.all(
-                                                                color:
-                                                                    mainColor)),
-                                                        child: Center(
-                                                          child: Text(
-                                                            LocalKeys.ADD_CART
-                                                                .tr(),
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontFamily: (lang ==
-                                                                        'en')
-                                                                    ? 'Nunito'
-                                                                    : 'Almarai',
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize:
-                                                                    w * 0.05),
-                                                          ),
-                                                        ),
-                                                      ),
+                                                      child: Image.asset(
+                                                          "assets/minus (2).png"),
                                                     ),
-                                                listener: (context, state) {})
-                                          ],
-                                        )
-                                      ],
-                                    ),
+                                                    Text(
+                                                      count.toString(),
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontFamily:
+                                                              (lang == 'en')
+                                                                  ? 'Nunito'
+                                                                  : 'Almarai',
+                                                          fontSize: w * 0.04,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    InkWell(
+                                                      onTap: () async {
+                                                        if (count == 1) {
+                                                          setState(() {
+                                                            count = 1;
+                                                          });
+                                                        } else {
+                                                          setState(() {
+                                                            count--;
+                                                          });
+                                                        }
+                                                      },
+                                                      child: Image.asset(
+                                                          "assets/minus (1).png"),
+                                                    ),
+                                                  ],
+                                                ),
+                                                listener: (context, state) {},
+                                              ),
+                                            );
+                                          },
+                                          listener: (context, state) {}),
+                                    ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                          )
+                          ),
+                          addtoCartHeader(
+                              context: context,
+                              w: w,
+                              h: h,
+                              count: count,
+                              currency: currency,
+                              lang: lang),
                         ],
                       ),
                   fallback: (context) => Center(

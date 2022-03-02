@@ -1,21 +1,5 @@
 // ignore_for_file: avoid_print
 
-// import 'dart:async';
-// import 'package:davinshi_app/screens/auth/sign_upScreen.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:flutter/material.dart';
-// import 'package:davinshi_app/lang/change_language.dart';
-// import 'package:davinshi_app/models/bottomnav.dart';
-// import 'package:davinshi_app/models/cart.dart';
-// import 'package:davinshi_app/models/constants.dart';
-// import 'package:davinshi_app/models/country.dart';
-// import 'package:davinshi_app/models/user.dart';
-// import 'package:davinshi_app/provider/cart_provider.dart';
-// import 'package:davinshi_app/provider/home.dart';
-// import 'package:davinshi_app/screens/home_folder/home_page.dart';
-// import 'package:provider/provider.dart';
-// import 'package:rounded_loading_button/rounded_loading_button.dart';
-
 import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -37,12 +21,25 @@ Future fireSms(
   double h = MediaQuery.of(context).size.height;
   final String countryCode = prefs.getString('country_code').toString();
   try {
-    String ph = countryCode + phone;
+    String ph = "+" + countryCode + phone;
     Future<PhoneVerificationFailed?> verificationFailed(
         FirebaseAuthException authException) async {
       checkRe = false;
       await Future.delayed(const Duration(milliseconds: 1000));
       btnController.stop();
+      print(authException.message.toString());
+      final snackBar = SnackBar(
+        content: Text(LocalKeys.FIREBASE_ERROR.tr()),
+        action: SnackBarAction(
+          label: LocalKeys.UNDO.tr(),
+          disabledTextColor: Colors.yellow,
+          textColor: Colors.yellow,
+          onPressed: () {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          },
+        ),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
 
     Future<PhoneCodeAutoRetrievalTimeout?> autoTimeout(String varId) async {
@@ -89,18 +86,6 @@ Future fireSms(
           if (dialogSms) {
             dialogSms = false;
             Navigator.pop(context);
-            final snackBar = SnackBar(
-              content: Text(LocalKeys.FIREBASE_ERROR.tr()),
-              action: SnackBarAction(
-                label: LocalKeys.UNDO.tr(),
-                disabledTextColor: Colors.yellow,
-                textColor: Colors.yellow,
-                onPressed: () {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                },
-              ),
-            );
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           }
           showDialog(
               context: context,
@@ -169,59 +154,63 @@ Future fireSms(
                           SizedBox(
                             height: h * 1.5 / 100,
                           ),
-
-                          // StatefulBuilder(
-                          //   builder: (context2, setState3) {
-                          //     if (counter == 60) {
-                          //       timer = Timer.periodic(
-                          //           const Duration(seconds: 1), (e) {
-                          //         if (e.isActive) {
-                          //           setState3(() {
-                          //             counter--;
-                          //           });
-                          //         }
-                          //         if (counter == 0) {
-                          //           e.cancel();
-                          //         }
-                          //       });
-                          //     }
-                          //     return SizedBox(
-                          //       width: double.infinity,
-                          //       child: Row(
-                          //         children: [
-                          //           // InkWell(
-                          //           //   child: RichText(
-                          //           //     text: TextSpan(children: [
-                          //           //       TextSpan(
-                          //           //           text: translate(
-                          //           //               context, 'sms', 're'),
-                          //           //           style: TextStyle(
-                          //           //               color: mainColor,
-                          //           //               fontSize: w * 0.035)),
-                          //           //       TextSpan(
-                          //           //           text: counter.toString(),
-                          //           //           style: const TextStyle(
-                          //           //               color: Colors.black)),
-                          //           //     ]),
-                          //           //   ),
-                          //           //   onTap: () {
-                          //           //     if (counter == 0) {
-                          //           //       if (!checkRe) {
-                          //           //         checkRe = true;
-                          //           //         timer.cancel();
-                          //           //         dialogSms = true;
-                          //           //         fireSms(
-                          //           //             context, phone, _btnController);
-                          //           //       }
-                          //           //     }
-                          //           //   },
-                          //           // ),
-                          //         ],
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
-
+                          StatefulBuilder(
+                            builder: (context2, setState3) {
+                              if (counter == 60) {
+                                timer = Timer.periodic(
+                                    const Duration(seconds: 1), (e) {
+                                  if (e.isActive) {
+                                    setState3(() {
+                                      counter--;
+                                    });
+                                  }
+                                  if (counter == 0) {
+                                    e.cancel();
+                                  }
+                                });
+                              }
+                              return SizedBox(
+                                width: double.infinity,
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    InkWell(
+                                      child: RichText(
+                                        text: TextSpan(children: [
+                                          TextSpan(
+                                              text: "Resend",
+                                              style: TextStyle(
+                                                  color: mainColor,
+                                                  fontSize: w * 0.035)),
+                                        ]),
+                                      ),
+                                      onTap: () {
+                                        if (counter == 0) {
+                                          if (!checkRe) {
+                                            checkRe = true;
+                                            timer.cancel();
+                                            dialogSms = true;
+                                            fireSms(
+                                                phone: phone,
+                                                context: context,
+                                                btnController: btnController);
+                                          }
+                                        }
+                                      },
+                                    ),
+                                    SizedBox(
+                                      width: w * 0.02,
+                                    ),
+                                    Text(counter.toString(),
+                                        style: const TextStyle(
+                                            color: Colors.black)),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
                           SizedBox(
                             height: h * 1.5 / 100,
                           ),

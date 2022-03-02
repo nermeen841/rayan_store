@@ -8,6 +8,7 @@ import 'package:rayan_store/componnent/constants.dart';
 import 'package:rayan_store/generated/local_keys.dart';
 import 'package:rayan_store/screens/cart/cubit/cart_cubit.dart';
 import 'package:rayan_store/screens/country/cubit/country_cubit.dart';
+import 'package:rayan_store/screens/profile/cubit/userprofile_cubit.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -26,6 +27,16 @@ class _AddressInfoState extends State<AddressInfo> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       lang = preferences.getString('language').toString();
+      if (preferences.getBool('login') == true) {
+        _listEd[0].text = UserprofileCubit.get(context).userModel!.name ?? '';
+        _listEd[1].text = UserprofileCubit.get(context).userModel!.email ?? '';
+        _listEd[2].text = UserprofileCubit.get(context).userModel!.phone ?? '';
+      } else {
+        _listEd[0].text = '';
+        _listEd[1].text = '';
+        _listEd[2].text = '';
+      }
+      _listEd[4].text = preferences.getString('user_address') ?? '';
     });
   }
 
@@ -139,7 +150,7 @@ class _AddressInfoState extends State<AddressInfo> {
                                 validator: (value) {
                                   if (index != 1 && index != 5) {
                                     if (value!.isEmpty) {
-                                      return "field is required";
+                                      return LocalKeys.VALID.tr();
                                     }
                                   }
                                   if (index == 1) {
@@ -147,13 +158,13 @@ class _AddressInfoState extends State<AddressInfo> {
                                       if (value.length < 4 ||
                                           !value.endsWith('.com') ||
                                           '@'.allMatches(value).length != 1) {
-                                        return "Enter valid email";
+                                        return LocalKeys.VALID_EMAIL.tr();
                                       }
                                     }
                                   }
-                                  if (index == 2 || index == 3) {
-                                    if (value!.length != 8) {
-                                      return "Enter valid phone";
+                                  if (index == 2) {
+                                    if (value!.length < 8) {
+                                      return LocalKeys.VALID_PHONE.tr();
                                     }
                                   }
                                   return null;

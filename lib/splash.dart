@@ -1,4 +1,5 @@
 // ignore_for_file: use_key_in_widget_constructors, avoid_print
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:async';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -40,14 +41,23 @@ class _SplashScreenState extends State<SplashScreen> {
       setState(() {
         currentPosition = position;
       });
+      getAddressFromLatLong(currentPosition);
       SharedPreferences pres = await SharedPreferences.getInstance();
       pres.setString('late', position.altitude.toString());
       pres.setString('lang', position.longitude.toString());
-      print("lattitude ................. : " + position.altitude.toString());
-      print("longtitude ................. : " + position.longitude.toString());
     }).catchError((e) {
       print("location errrrrrrrrrrrrrrrrrrrrrrrr : " + e.toString());
     });
+  }
+
+  Future<void> getAddressFromLatLong(Position position) async {
+    List<Placemark> placemarks =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    Placemark place = placemarks[0];
+    String address = '${place.street}, ${place.subLocality},${place.country}';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('user_address', address);
+    print("user address: " + address);
   }
 
   getScreen() async {
@@ -111,14 +121,12 @@ class _SplashScreenState extends State<SplashScreen> {
       height: h,
       decoration: const BoxDecoration(
         image: DecorationImage(
-            image: AssetImage("assets/icons/splash.jpeg"), fit: BoxFit.cover),
+            image: AssetImage("assets/Group 2.png"), fit: BoxFit.cover),
       ),
       child: Scaffold(
         backgroundColor: Colors.white54,
         body: Center(
-          child: Image.asset(
-            "assets/icons/Group 30.png",
-          ),
+          child: Image.asset("assets/LOGO.png"),
         ),
       ),
     );

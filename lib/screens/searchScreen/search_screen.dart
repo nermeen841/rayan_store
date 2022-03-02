@@ -11,7 +11,6 @@ import 'package:rayan_store/componnent/http_services.dart';
 import 'package:rayan_store/generated/local_keys.dart';
 import 'package:rayan_store/screens/cart/cart.dart';
 import 'package:rayan_store/screens/category/category.dart';
-import 'package:rayan_store/screens/searchScreen/componnent/search_history.dart';
 import 'package:rayan_store/screens/searchScreen/componnent/searchbody.dart';
 import 'package:rayan_store/screens/tabone_screen/cubit/home_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -122,15 +121,14 @@ class _SearchScreenState extends State<SearchScreen> {
               textInputAction: TextInputAction.search,
               onEditingComplete: () {
                 FocusScope.of(context).unfocus();
-                if (login) {
+
+                setState(() {
+                  isSearching = true;
+                });
+                if (search.text.isEmpty) {
                   setState(() {
-                    isSearching = true;
+                    isSearching = false;
                   });
-                  if (search.text.isEmpty) {
-                    setState(() {
-                      isSearching = false;
-                    });
-                  }
                 }
               },
               decoration: InputDecoration(
@@ -151,16 +149,14 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               ),
               onChanged: (val) {
-                if (login) {
+                setState(() {
+                  isSearching = true;
+                  search.text = val;
+                });
+                if (search.text.isEmpty) {
                   setState(() {
-                    isSearching = true;
-                    search.text = val;
+                    isSearching = false;
                   });
-                  if (search.text.isEmpty) {
-                    setState(() {
-                      isSearching = false;
-                    });
-                  }
                 }
               },
               keyboardType: TextInputType.text,
@@ -179,9 +175,10 @@ class _SearchScreenState extends State<SearchScreen> {
             SizedBox(
               height: h * 0.03,
             ),
-            if (login && isSearching) SearchBody(keyword: search.text),
-            (login && !isSearching) ? SearchHistory() : Container(),
-            if (!login)
+            if (isSearching) SearchBody(keyword: search.text),
+            // if (login && !isSearching) SearchHistory(),
+            // !login &&
+            if (!isSearching)
               BlocConsumer<HomeCubit, AppCubitStates>(
                   builder: (context, state) {
                     return ConditionalBuilder(

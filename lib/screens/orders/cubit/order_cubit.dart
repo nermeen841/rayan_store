@@ -22,7 +22,6 @@ class OrderCubit extends Cubit<OrderState> {
     try {
       var response = await http.post(Uri.parse(EndPoints.All_ORDERS),
           headers: {'auth-token': preferences.getString('token').toString()});
-
       var data = jsonDecode(response.body);
       print(response.body);
       if (data['status'] == 1) {

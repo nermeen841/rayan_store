@@ -3,31 +3,31 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rayan_store/DBhelper/appState.dart';
 import 'package:rayan_store/DBhelper/cubit.dart';
 import 'package:rayan_store/componnent/constants.dart';
 import 'package:rayan_store/generated/local_keys.dart';
-import 'package:rayan_store/screens/bottomnav/homeScreen.dart';
 import 'package:rayan_store/screens/cart/cubit/cart_cubit.dart';
 import 'package:rayan_store/screens/checkout/payment.dart';
-import 'package:rayan_store/screens/orders/cubit/order_cubit.dart';
-import 'package:rayan_store/screens/orders/orders.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmCart extends StatefulWidget {
   final String totalPrice;
+  final String orderId;
   final String subTotal;
 
   const ConfirmCart(
-      {Key? key, required this.totalPrice, required this.subTotal})
+      {Key? key,
+      required this.totalPrice,
+      required this.subTotal,
+      required this.orderId})
       : super(key: key);
   @override
   _ConfirmCartState createState() => _ConfirmCartState();
 }
 
 class _ConfirmCartState extends State<ConfirmCart> {
-  int isCash = 0;
+  // int isCash = 0;
   int? selected;
   int _counter = 2;
   String lang = '';
@@ -86,64 +86,63 @@ class _ConfirmCartState extends State<ConfirmCart> {
             SizedBox(
               height: h * 0.03,
             ),
-            InkWell(
-              onTap: () {
-                setState(() {
-                  _counter = 1;
-                  isCash = 1;
-                });
-              },
-              child: Container(
-                height: h * 0.08,
-                width: w * 0.9,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(5),
-                  color: Colors.grey[200],
-                ),
-                child: Padding(
-                  padding: EdgeInsets.only(right: w * 0.05, left: w * 0.05),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        LocalKeys.CASH.tr(),
-                        style: TextStyle(
-                          fontSize: w * 0.035,
-                          fontFamily: (lang == 'en') ? 'Nunito' : 'Almarai',
-                        ),
-                      ),
-                      Container(
-                        width: w * 0.06,
-                        height: w * 0.06,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          border:
-                              Border.all(color: mainColor, width: w * 0.005),
-                          color: _counter == 1 ? mainColor : Colors.white,
-                        ),
-                        child: Center(
-                          child: IconButton(
-                            icon: const Icon(Icons.done),
-                            onPressed: () {},
-                            iconSize: w * 0.04,
-                            color: Colors.white,
-                            padding: const EdgeInsets.all(0),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              height: h * 0.02,
-            ),
+            // InkWell(
+            //   onTap: () {
+            //     setState(() {
+            //       _counter = 1;
+            //       isCash = 1;
+            //     });
+            //   },
+            //   child: Container(
+            //     height: h * 0.08,
+            //     width: w * 0.9,
+            //     decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(5),
+            //       color: Colors.grey[200],
+            //     ),
+            //     child: Padding(
+            //       padding: EdgeInsets.only(right: w * 0.05, left: w * 0.05),
+            //       child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //         children: [
+            //           Text(
+            //             LocalKeys.CASH.tr(),
+            //             style: TextStyle(
+            //               fontSize: w * 0.035,
+            //               fontFamily: (lang == 'en') ? 'Nunito' : 'Almarai',
+            //             ),
+            //           ),
+            //           Container(
+            //             width: w * 0.06,
+            //             height: w * 0.06,
+            //             decoration: BoxDecoration(
+            //               borderRadius: BorderRadius.circular(50),
+            //               border:
+            //                   Border.all(color: mainColor, width: w * 0.005),
+            //               color: _counter == 1 ? mainColor : Colors.white,
+            //             ),
+            //             child: Center(
+            //               child: IconButton(
+            //                 icon: const Icon(Icons.done),
+            //                 onPressed: () {},
+            //                 iconSize: w * 0.04,
+            //                 color: Colors.white,
+            //                 padding: const EdgeInsets.all(0),
+            //               ),
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            // SizedBox(
+            //   height: h * 0.02,
+            // ),
             InkWell(
               onTap: () {
                 setState(() {
                   _counter = 2;
-                  isCash = 0;
                 });
               },
               child: Container(
@@ -196,12 +195,12 @@ class _ConfirmCartState extends State<ConfirmCart> {
               onTap: () {
                 setState(() {
                   _counter = 3;
-                  isCash = 0;
                 });
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => PaymentScreen(
+                              orderId: widget.orderId,
                               totalPrice: widget.totalPrice,
                             )));
               },
@@ -262,33 +261,34 @@ class _ConfirmCartState extends State<ConfirmCart> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      LocalKeys.PRICE.tr(),
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: (lang == 'en')
-                                              ? 'Nunito'
-                                              : 'Almarai',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: w * 0.04),
-                                    ),
-                                    Text(
-                                      widget.subTotal + " " + currency,
-                                      style: TextStyle(
-                                          color: Colors.black,
-                                          fontFamily: (lang == 'en')
-                                              ? 'Nunito'
-                                              : 'Almarai',
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: w * 0.04),
-                                    ),
-                                  ],
-                                ),
+                                // Row(
+                                //   crossAxisAlignment: CrossAxisAlignment.start,
+                                //   mainAxisAlignment:
+                                //       MainAxisAlignment.spaceBetween,
+                                //   children: [
+                                //     Text(
+                                //       LocalKeys.PRICE.tr(),
+                                //       style: TextStyle(
+                                //           color: Colors.black,
+                                //           fontFamily: (lang == 'en')
+                                //               ? 'Nunito'
+                                //               : 'Almarai',
+                                //           fontWeight: FontWeight.bold,
+                                //           fontSize: w * 0.04),
+                                //     ),
+                                //     Text(
+                                //       widget.subTotal + " " + currency,
+                                //       style: TextStyle(
+                                //           color: Colors.black,
+                                //           fontFamily: (lang == 'en')
+                                //               ? 'Nunito'
+                                //               : 'Almarai',
+                                //           fontWeight: FontWeight.bold,
+                                //           fontSize: w * 0.04),
+                                //     ),
+                                //   ],
+                                // ),
+
                                 SizedBox(
                                   height: h * 0.03,
                                 ),
@@ -347,7 +347,8 @@ class _ConfirmCartState extends State<ConfirmCart> {
                                               .deliveryModel!
                                               .delivery
                                               .toString() +
-                                          "DAYS",
+                                          " " +
+                                          LocalKeys.DAYS.tr(),
                                       style: TextStyle(
                                           color: Colors.black,
                                           fontFamily: (lang == 'en')
@@ -368,7 +369,7 @@ class _ConfirmCartState extends State<ConfirmCart> {
               height: h * 0.03,
             ),
             Padding(
-              padding: EdgeInsets.only(top: h * 0.17),
+              padding: EdgeInsets.only(top: h * 0.31),
               child: Align(
                 alignment: AlignmentDirectional.bottomEnd,
                 child: Container(
@@ -385,81 +386,61 @@ class _ConfirmCartState extends State<ConfirmCart> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        LocalKeys.TOTAL_PRICE.tr(),
-                        style: TextStyle(
-                            color: mainColor,
-                            fontFamily: (lang == 'en') ? 'Nunito' : 'Almarai',
-                            fontWeight: FontWeight.bold,
-                            fontSize: w * 0.05),
+                      SizedBox(
+                        height: h * 0.03,
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: h * 0.02),
-                            child: Text(
-                              widget.totalPrice + " " + currency,
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontFamily:
-                                      (lang == 'en') ? 'Nunito' : 'Almarai',
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: w * 0.05),
-                            ),
+                          Column(
+                            children: [
+                              Text(
+                                LocalKeys.TOTAL_PRICE.tr(),
+                                style: TextStyle(
+                                    color: mainColor,
+                                    fontFamily:
+                                        (lang == 'en') ? 'Nunito' : 'Almarai',
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: w * 0.05),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(top: h * 0.02),
+                                child: Text(
+                                  widget.totalPrice + " " + currency,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontFamily:
+                                          (lang == 'en') ? 'Nunito' : 'Almarai',
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: w * 0.05),
+                                ),
+                              ),
+                            ],
                           ),
                           BlocConsumer<DataBaseCubit, DatabaseStates>(
                               builder: (context, state) => InkWell(
                                     onTap: () {
                                       if (islogin) {
-                                        if (isCash == 1) {
-                                          OrderCubit.get(context)
-                                              .getAllorders();
-                                          DataBaseCubit.get(context)
-                                              .deleteTableContent();
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Orders()));
-                                        } else if (isCash == 0) {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PaymentScreen(
-                                                        totalPrice:
-                                                            widget.totalPrice,
-                                                      )));
-                                        }
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PaymentScreen(
+                                                      orderId: widget.orderId,
+                                                      totalPrice:
+                                                          widget.totalPrice,
+                                                    )));
                                       } else {
-                                        if (isCash == 0) {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      PaymentScreen(
-                                                        totalPrice:
-                                                            widget.totalPrice,
-                                                      )));
-                                        } else if (isCash == 1) {
-                                          DataBaseCubit.get(context)
-                                              .deleteTableContent();
-                                          Fluttertoast.showToast(
-                                              msg:
-                                                  "your order placed successfully",
-                                              backgroundColor: Colors.green,
-                                              textColor: Colors.white,
-                                              toastLength: Toast.LENGTH_LONG,
-                                              gravity: ToastGravity.CENTER);
-                                          Navigator.pushAndRemoveUntil(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      HomeScreen(index: 0)),
-                                              (route) => false);
-                                        }
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    PaymentScreen(
+                                                      orderId: widget.orderId,
+                                                      totalPrice:
+                                                          widget.totalPrice,
+                                                    )));
                                       }
                                     },
                                     child: Container(

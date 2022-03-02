@@ -188,7 +188,8 @@ class _NewProductScreenState extends State<NewProductScreen> {
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                 childAspectRatio: 0.6,
-                                mainAxisSpacing: w * 0.01,
+                                mainAxisSpacing: w * 0.08,
+                                crossAxisSpacing: h * 0.04,
                                 crossAxisCount: 2,
                               ),
                               itemBuilder: (context, index) => InkWell(
@@ -388,7 +389,12 @@ class _NewProductScreenState extends State<NewProductScreen> {
                       padding: EdgeInsets.only(top: h * 0.01, bottom: h * 0.01),
                       color: Colors.white,
                       child: Center(
-                        child: Text("No more products"),
+                        child: Text(
+                          LocalKeys.NO_MORE_PRODUCT.tr(),
+                          style: TextStyle(
+                              fontFamily:
+                                  (lang == 'en') ? 'Nunito' : 'Alamrai'),
+                        ),
                       ),
                     ),
                 ],

@@ -190,7 +190,8 @@ class _AllOffersScreenState extends State<AllOffersScreen> {
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                 childAspectRatio: 0.6,
-                                mainAxisSpacing: w * 0.01,
+                                mainAxisSpacing: w * 0.08,
+                                crossAxisSpacing: h * 0.04,
                                 crossAxisCount: 2,
                               ),
                               itemBuilder: (context, index) => InkWell(
@@ -391,8 +392,13 @@ class _AllOffersScreenState extends State<AllOffersScreen> {
                     Container(
                       padding: EdgeInsets.only(top: h * 0.01, bottom: h * 0.01),
                       color: Colors.white,
-                      child: const Center(
-                        child: Text("No more products"),
+                      child: Center(
+                        child: Text(
+                          LocalKeys.NO_MORE_PRODUCT.tr(),
+                          style: TextStyle(
+                              fontFamily:
+                                  (lang == 'en') ? 'Nunito' : 'Alamrai'),
+                        ),
                       ),
                     ),
                 ],

@@ -17,7 +17,7 @@ class _SearchHistoryState extends State<SearchHistory> {
   bool hasNextPage = true;
   bool isFirstLoadRunning = false;
   bool isLoadMoreRunning = false;
-  List searchData = [];
+  List searchHistory = [];
   String lang = '';
   String token = '';
   late ScrollController _controller;
@@ -40,15 +40,17 @@ class _SearchHistoryState extends State<SearchHistory> {
       Response response = await Dio().post(EndPoints.SEARCH_HISTORY,
           queryParameters: {'page': page},
           options: Options(headers: {
-            'auth-token': preferences.getString('token').toString(),
+            'auth-token': preferences.getString('token') ?? '',
           }));
+      print(token);
+      print(
+          "search history : ------------------------------------------------------------");
+      print(response.data);
       if (response.data['status'] == 1) {
         searchHistoryModel = SearchHistoryModel.fromJson(response.data);
-        if (searchHistoryModel!.texts!.data!.isNotEmpty) {
-          setState(() {
-            searchData = searchHistoryModel!.texts!.data!;
-          });
-        }
+        setState(() {
+          searchHistory = searchHistoryModel!.texts!.data!;
+        });
       }
     } catch (err) {
       print("........................................................" +
@@ -87,7 +89,7 @@ class _SearchHistoryState extends State<SearchHistory> {
         }
         if (fetchedPosts.isNotEmpty) {
           setState(() {
-            searchData.addAll(fetchedPosts);
+            searchHistory.addAll(fetchedPosts);
           });
         } else {
           setState(() {
@@ -129,8 +131,7 @@ class _SearchHistoryState extends State<SearchHistory> {
                 height: h * 0.55,
                 child: ListView.separated(
                   controller: _controller,
-                  shrinkWrap: true,
-                  itemCount: searchData.length,
+                  itemCount: searchHistory.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: EdgeInsets.symmetric(vertical: h * 0.01),
@@ -140,7 +141,7 @@ class _SearchHistoryState extends State<SearchHistory> {
                             width: w * 2.5 / 100,
                           ),
                           Text(
-                            searchData[index].text,
+                            searchHistory[index].text.toString(),
                             style: TextStyle(
                                 fontFamily:
                                     (lang == 'en') ? 'Nunito' : 'Alamari',

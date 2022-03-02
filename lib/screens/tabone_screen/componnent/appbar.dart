@@ -171,7 +171,7 @@ class AppBarHome {
                                     child: Container(
                                       padding: EdgeInsets.symmetric(
                                           vertical: h * 0.01,
-                                          horizontal: w * 0.01),
+                                          horizontal: w * 0.05),
                                       decoration: BoxDecoration(
                                           color: Colors.white,
                                           boxShadow: [
@@ -192,6 +192,8 @@ class AppBarHome {
                                                     .data!
                                                     .categories![index]
                                                     .nameEn!,
+                                                overflow: TextOverflow.ellipsis,
+                                                maxLines: 1,
                                                 style: TextStyle(
                                                     fontSize: w * 0.04,
                                                     color: Colors.black,

@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:rayan_store/DBhelper/cubit.dart';
 import 'dart:convert';
 import 'package:rayan_store/componnent/http_services.dart';
+import 'package:rayan_store/screens/cart/cart_product/body.dart';
 import 'package:rayan_store/screens/cart/model/delivery.dart';
 import 'package:rayan_store/screens/checkout/checkout.dart';
 import 'package:rounded_loading_button/rounded_loading_button.dart';
@@ -42,12 +43,14 @@ class CartCubit extends Cubit<CartState> {
             productId: int.parse(productId),
             productQty:
                 DataBaseCubit.get(context).counter[int.parse(productId)]!);
+        // DataBaseCubit.get(context).getAddPrice();
         emit(CheckProductAddcartSuccessState());
       } else {
         Fluttertoast.showToast(
-            msg: "available amount ${data['data']}",
+            msg:
+                "product amount not available , available amount is only : ${data['data']}",
             textColor: Colors.white,
-            backgroundColor: Colors.black,
+            backgroundColor: Colors.red,
             toastLength: Toast.LENGTH_LONG,
             gravity: ToastGravity.TOP);
       }
@@ -135,11 +138,12 @@ class CartCubit extends Cubit<CartState> {
     emit(SaveOrderLoadingState());
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final String lang = prefs.get('language').toString();
-    final String lattitude = prefs.getString('late').toString();
-    final String longtitude = prefs.getString('lang').toString();
-    final String countryId = prefs.getString('country_id').toString();
-    final String cityId = prefs.getString('city_id').toString();
+    final String lattitude = prefs.getString('late') ?? '';
+    final String longtitude = prefs.getString('lang') ?? '';
+    final String countryId = prefs.getString('country_id') ?? '';
+    final String cityId = prefs.getString('city_id') ?? '';
     final String cobon = prefs.getString('cobon') ?? '';
+
     String productId = '';
     DataBaseCubit.get(context).cart.forEach((element) {
       productId += '${element['productId'].toString()}' ',';
@@ -188,8 +192,8 @@ class CartCubit extends Cubit<CartState> {
             context,
             MaterialPageRoute(
                 builder: (context) => ConfirmCart(
-                      subTotal:
-                          DataBaseCubit.get(context).finalPrice.toString(),
+                      orderId: data['order']['id'].toString(),
+                      subTotal: RayanCartBody.finalPrice.toString(),
                       totalPrice: data['order']['total_price'].toString(),
                     )));
         emit(SaveOrderSuccessState());

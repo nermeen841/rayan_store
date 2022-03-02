@@ -30,4 +30,5 @@ abstract class EndPoints {
   static const SAVE_ORDER = BASE_URL + "save-order";
   static const All_ORDERS = BASE_URL + "get-orders";
   static const SINGLE_ORDERS = BASE_URL + "get-order";
+  static const CALL_BACK = BASE_URL + "payment_callback/";
 }

@@ -16,6 +16,8 @@ class UpdateDatafromDatabase extends DatabaseStates {}
 
 class DeleteTablecontentDatabase extends DatabaseStates {}
 
-class TotalPriceState extends DatabaseStates {}
+class TotalPriceIncreaseState extends DatabaseStates {}
+
+class TotalPriceDecreaseState extends DatabaseStates {}
 
 class TotalQuantityState extends DatabaseStates {}

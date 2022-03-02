@@ -85,5 +85,14 @@
     "exit_app":"Exit App",
     "exit_title":"Are you sure you want to exit App",
     "yes":"Yes",
-    "no":"No"
+    "no":"No",
+    "days":  "DAYS",
+    "valid_email":"Enter valid email",
+    "valid_phone":"Enter valid phone",
+    "valid":"field is required",
+    "attribute": "Choose attribute first",
+    "remove_cart":"Remove from Cart",
+    "remove_item":"Product removed from your cart",
+    "qty":"Quantity",
+    "no_product_more":"No more product"
 }

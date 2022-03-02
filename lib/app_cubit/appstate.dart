@@ -6,6 +6,8 @@ class SelectionColorState extends AppCubitStates {}
 
 class SelectionSizeState extends AppCubitStates {}
 
+class ProfileImageState extends AppCubitStates {}
+
 class SelectionAddressState extends AppCubitStates {}
 
 class HomeitemsLoaedingState extends AppCubitStates {}

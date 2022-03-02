@@ -1,4 +1,4 @@
-// ignore_for_file: use_key_in_widget_constructors
+// ignore_for_file: use_key_in_widget_constructors, avoid_print
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:badges/badges.dart';
@@ -108,285 +108,310 @@ class _FavouriteScreenState extends State<FavouriteScreen> {
             ),
           ],
         ),
-        body: (isLogin)
-            ? BlocConsumer<FavouriteCubit, FavouriteState>(
-                builder: (context, state) {
-                  return ConditionalBuilder(
-                      condition: state is! GetFavouriteLoadingState,
-                      builder: (context) => ListView(
-                            primary: true,
-                            shrinkWrap: true,
-                            padding: EdgeInsets.symmetric(
-                                vertical: h * 0.03, horizontal: w * 0.03),
-                            children: [
-                              SizedBox(
-                                height: h * 0.01,
-                              ),
-                              (FavouriteCubit.get(context)
+        body: BlocConsumer<FavouriteCubit, FavouriteState>(
+            builder: (context, state) {
+          return (isLogin)
+              ? ConditionalBuilder(
+                  condition: state is! GetFavouriteLoadingState,
+                  builder: (context) => ListView(
+                    primary: true,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.symmetric(
+                        vertical: h * 0.03, horizontal: w * 0.03),
+                    children: [
+                      SizedBox(
+                        height: h * 0.01,
+                      ),
+                      (FavouriteCubit.get(context)
+                              .wishlistModel!
+                              .data!
+                              .isNotEmpty)
+                          ? GridView.count(
+                              shrinkWrap: true,
+                              primary: false,
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.6,
+                              mainAxisSpacing: w * 0.08,
+                              crossAxisSpacing: h * 0.04,
+                              children: List.generate(
+                                  FavouriteCubit.get(context)
                                       .wishlistModel!
                                       .data!
-                                      .isNotEmpty)
-                                  ? GridView.count(
-                                      shrinkWrap: true,
-                                      primary: false,
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 0.64,
-                                      mainAxisSpacing: w * 0.01,
-                                      children: List.generate(
-                                          FavouriteCubit.get(context)
-                                              .wishlistModel!
-                                              .data!
-                                              .length,
-                                          (index) => InkWell(
-                                                onTap: () {
-                                                  HomeCubit.get(context)
-                                                      .getProductdata(
-                                                          productId:
-                                                              FavouriteCubit.get(
-                                                                      context)
-                                                                  .wishlistModel!
-                                                                  .data![index]
-                                                                  .id
-                                                                  .toString());
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ProductDetail()));
-                                                },
-                                                child: Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: h * 0.01,
-                                                      horizontal: w * 0.01),
-                                                  child: Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      Container(
-                                                        width: w * 0.45,
-                                                        height: h * 0.28,
-                                                        decoration: BoxDecoration(
-                                                            image: DecorationImage(
-                                                                image: NetworkImage(EndPoints
-                                                                        .IMAGEURL2 +
-                                                                    FavouriteCubit.get(
+                                      .length,
+                                  (index) => InkWell(
+                                        onTap: () {
+                                          HomeCubit.get(context).getProductdata(
+                                              productId:
+                                                  FavouriteCubit.get(context)
+                                                      .wishlistModel!
+                                                      .data![index]
+                                                      .id
+                                                      .toString());
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ProductDetail()));
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              vertical: h * 0.01,
+                                              horizontal: w * 0.01),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Container(
+                                                width: w * 0.45,
+                                                height: h * 0.28,
+                                                decoration: BoxDecoration(
+                                                    image: DecorationImage(
+                                                        image: NetworkImage(EndPoints
+                                                                .IMAGEURL2 +
+                                                            FavouriteCubit.get(
+                                                                    context)
+                                                                .wishlistModel!
+                                                                .data![index]
+                                                                .img!),
+                                                        fit: BoxFit.fitHeight)),
+                                              ),
+                                              SizedBox(
+                                                width: w * 0.45,
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: h * 0.01,
+                                                    ),
+                                                    Container(
+                                                        constraints:
+                                                            BoxConstraints(
+                                                          maxHeight: h * 0.07,
+                                                        ),
+                                                        child: (lang == 'en')
+                                                            ? Text(
+                                                                FavouriteCubit.get(
+                                                                        context)
+                                                                    .wishlistModel!
+                                                                    .data![
+                                                                        index]
+                                                                    .titleEn!,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      w * 0.035,
+                                                                  fontFamily:
+                                                                      'Nunito',
+                                                                ),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .fade)
+                                                            : Text(
+                                                                FavouriteCubit.get(
+                                                                        context)
+                                                                    .wishlistModel!
+                                                                    .data![
+                                                                        index]
+                                                                    .titleAr!,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontSize:
+                                                                      w * 0.035,
+                                                                  fontFamily:
+                                                                      'Almarai',
+                                                                ),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .fade)),
+                                                    Container(
+                                                        constraints:
+                                                            BoxConstraints(
+                                                          maxHeight: h * 0.07,
+                                                        ),
+                                                        child: (lang == 'en')
+                                                            ? Text(
+                                                                FavouriteCubit.get(
+                                                                        context)
+                                                                    .wishlistModel!
+                                                                    .data![
+                                                                        index]
+                                                                    .descriptionEn!,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontSize:
+                                                                      w * 0.035,
+                                                                  fontFamily:
+                                                                      'Nunito',
+                                                                ),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .fade)
+                                                            : Text(
+                                                                FavouriteCubit.get(
+                                                                        context)
+                                                                    .wishlistModel!
+                                                                    .data![
+                                                                        index]
+                                                                    .descriptionAr!,
+                                                                style:
+                                                                    TextStyle(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  fontSize:
+                                                                      w * 0.035,
+                                                                  fontFamily:
+                                                                      'Almarai',
+                                                                ),
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .fade)),
+                                                    SizedBox(
+                                                      height: h * 0.005,
+                                                    ),
+                                                    Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        RichText(
+                                                          text: TextSpan(
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: FavouriteCubit.get(
+                                                                              context)
+                                                                          .wishlistModel!
+                                                                          .data![
+                                                                              index]
+                                                                          .price
+                                                                          .toString() +
+                                                                      " " +
+                                                                      currency,
+                                                                  style: TextStyle(
+                                                                      fontFamily: (lang ==
+                                                                              'en')
+                                                                          ? 'Nunito'
+                                                                          : 'Almarai',
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color:
+                                                                          mainColor)),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        (FavouriteCubit.get(
+                                                                        context)
+                                                                    .wishlistModel!
+                                                                    .data![
+                                                                        index]
+                                                                    .hasOffer ==
+                                                                1)
+                                                            ? Text(
+                                                                FavouriteCubit.get(
                                                                             context)
                                                                         .wishlistModel!
                                                                         .data![
                                                                             index]
-                                                                        .img!),
-                                                                fit: BoxFit
-                                                                    .fitHeight)),
-                                                      ),
-                                                      SizedBox(
-                                                        width: w * 0.45,
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            SizedBox(
-                                                              height: h * 0.01,
-                                                            ),
-                                                            Container(
-                                                                constraints:
-                                                                    BoxConstraints(
-                                                                  maxHeight:
-                                                                      h * 0.07,
+                                                                        .beforePrice
+                                                                        .toString() +
+                                                                    " " +
+                                                                    currency,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize:
+                                                                      w * 0.035,
+                                                                  fontFamily: (lang ==
+                                                                          'en')
+                                                                      ? 'Nunito'
+                                                                      : 'Almarai',
+                                                                  decoration:
+                                                                      TextDecoration
+                                                                          .lineThrough,
+                                                                  decorationColor:
+                                                                      mainColor,
+                                                                  color: Colors
+                                                                      .grey,
                                                                 ),
-                                                                child: (lang ==
-                                                                        'en')
-                                                                    ? Text(
-                                                                        FavouriteCubit.get(context)
-                                                                            .wishlistModel!
-                                                                            .data![
-                                                                                index]
-                                                                            .titleEn!,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          fontSize:
-                                                                              w * 0.035,
-                                                                          fontFamily:
-                                                                              'Nunito',
-                                                                        ),
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .fade)
-                                                                    : Text(
-                                                                        FavouriteCubit.get(context)
-                                                                            .wishlistModel!
-                                                                            .data![
-                                                                                index]
-                                                                            .titleAr!,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.black,
-                                                                          fontSize:
-                                                                              w * 0.035,
-                                                                          fontFamily:
-                                                                              'Almarai',
-                                                                        ),
-                                                                        overflow:
-                                                                            TextOverflow.fade)),
-                                                            Container(
-                                                                constraints:
-                                                                    BoxConstraints(
-                                                                  maxHeight:
-                                                                      h * 0.07,
-                                                                ),
-                                                                child: (lang ==
-                                                                        'en')
-                                                                    ? Text(
-                                                                        FavouriteCubit.get(context)
-                                                                            .wishlistModel!
-                                                                            .data![
-                                                                                index]
-                                                                            .descriptionEn!,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.grey,
-                                                                          fontSize:
-                                                                              w * 0.035,
-                                                                          fontFamily:
-                                                                              'Nunito',
-                                                                        ),
-                                                                        overflow:
-                                                                            TextOverflow
-                                                                                .fade)
-                                                                    : Text(
-                                                                        FavouriteCubit.get(context)
-                                                                            .wishlistModel!
-                                                                            .data![
-                                                                                index]
-                                                                            .descriptionAr!,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          color:
-                                                                              Colors.grey,
-                                                                          fontSize:
-                                                                              w * 0.035,
-                                                                          fontFamily:
-                                                                              'Almarai',
-                                                                        ),
-                                                                        overflow:
-                                                                            TextOverflow.fade)),
-                                                            SizedBox(
-                                                              height: h * 0.005,
-                                                            ),
-                                                            Row(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                RichText(
-                                                                  text:
-                                                                      TextSpan(
-                                                                    children: [
-                                                                      TextSpan(
-                                                                          text: FavouriteCubit.get(context).wishlistModel!.data![index].price.toString() +
-                                                                              " " +
-                                                                              currency,
-                                                                          style: TextStyle(
-                                                                              fontFamily: (lang == 'en') ? 'Nunito' : 'Almarai',
-                                                                              fontWeight: FontWeight.bold,
-                                                                              color: mainColor)),
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                (FavouriteCubit.get(context)
-                                                                            .wishlistModel!
-                                                                            .data![index]
-                                                                            .hasOffer ==
-                                                                        1)
-                                                                    ? Text(
-                                                                        FavouriteCubit.get(context).wishlistModel!.data![index].beforePrice.toString() +
-                                                                            " " +
-                                                                            currency,
-                                                                        style:
-                                                                            TextStyle(
-                                                                          fontSize:
-                                                                              w * 0.035,
-                                                                          fontFamily: (lang == 'en')
-                                                                              ? 'Nunito'
-                                                                              : 'Almarai',
-                                                                          decoration:
-                                                                              TextDecoration.lineThrough,
-                                                                          decorationColor:
-                                                                              mainColor,
-                                                                          color:
-                                                                              Colors.grey,
-                                                                        ),
-                                                                      )
-                                                                    : Container(),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
+                                                              )
+                                                            : Container(),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
-                                              )),
-                                    )
-                                  : Center(
-                                      child: Text(
-                                        LocalKeys.NO_PRODUCT.tr(),
-                                        style: TextStyle(
-                                            color: mainColor,
-                                            fontFamily: (lang == 'en')
-                                                ? 'Nunito'
-                                                : 'Almarai',
-                                            fontSize: w * 0.05,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                    ),
-                            ],
-                          ),
-                      fallback: (context) => Center(
-                            child: CircularProgressIndicator(
-                              color: mainColor,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(top: h * 0.3),
+                              child: Center(
+                                child: Text(
+                                  LocalKeys.NO_PRODUCT.tr(),
+                                  style: TextStyle(
+                                      color: mainColor,
+                                      fontFamily:
+                                          (lang == 'en') ? 'Nunito' : 'Almarai',
+                                      fontSize: w * 0.05,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
                             ),
-                          ));
-                },
-                listener: (context, state) {})
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Center(
-                    child: Image.asset(
-                      "assets/3099609.jpg",
-                      height: h * 0.35,
+                    ],
+                  ),
+                  fallback: (context) => Center(
+                    child: CircularProgressIndicator(
+                      color: mainColor,
                     ),
                   ),
-                  SizedBox(
-                    height: h * 0.02,
-                  ),
-                  Center(
-                    child: Text(
-                      LocalKeys.MUST_LOGIN.tr(),
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: mainColor,
-                          fontFamily: (lang == 'en') ? 'Nunito' : 'Almarai',
-                          fontSize: w * 0.05,
-                          fontWeight: FontWeight.bold),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Center(
+                      child: Image.asset(
+                        "assets/3099609.jpg",
+                        height: h * 0.35,
+                      ),
                     ),
-                  ),
-                ],
-              ));
+                    SizedBox(
+                      height: h * 0.02,
+                    ),
+                    Center(
+                      child: Text(
+                        LocalKeys.MUST_LOGIN.tr(),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: mainColor,
+                            fontFamily: (lang == 'en') ? 'Nunito' : 'Almarai',
+                            fontSize: w * 0.05,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
+                );
+        }, listener: (context, state) {
+          if (state is GetFavouriteSuccessState) {
+            print("-------------------------------------------------------");
+          } else if (state is GetFavouriteLoadingState) {
+            print("loading---------------------------------");
+          }
+        }));
   }
 }

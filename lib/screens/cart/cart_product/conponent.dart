@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_function_literals_in_foreach_calls
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rayan_store/componnent/constants.dart';
@@ -21,6 +23,7 @@ Widget buildCartIem(
     required BuildContext context}) {
   var w = MediaQuery.of(context).size.width;
   var h = MediaQuery.of(context).size.height;
+
   return Container(
     decoration: BoxDecoration(border: Border.all(color: Colors.grey.shade300)),
     child: Column(
@@ -91,17 +94,32 @@ Widget buildCartIem(
                     children: [
                       InkWell(
                           onTap: increaseqty,
-                          child: const Icon(Icons.add_circle_outline)),
+                          child: Icon(
+                            Icons.add_circle_outline,
+                            size: w * 0.1,
+                          )),
                       SizedBox(
                         width: w * 0.025,
                       ),
-                      Text('$qty'),
+                      Text(
+                        '$qty',
+                        style: TextStyle(
+                            fontFamily: (RayanCartBody.lang == 'en')
+                                ? 'Nunito'
+                                : 'Alamari',
+                            fontSize: w * 0.04,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
                       SizedBox(
                         width: w * 0.025,
                       ),
                       InkWell(
                           onTap: decreaseqty,
-                          child: const Icon(Icons.remove_circle_outline)),
+                          child: Icon(
+                            Icons.remove_circle_outline,
+                            size: w * 0.1,
+                          )),
                     ],
                   )
                 ],

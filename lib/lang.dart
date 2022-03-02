@@ -25,22 +25,36 @@ class _LangPageState extends State<LangPage> {
           children: [
             Stack(
               children: [
-                Container(
-                  width: w,
-                  height: h,
-                  decoration: const BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage("assets/icons/Mask Group 32.png"),
-                          fit: BoxFit.fill)),
+                Stack(
+                  children: [
+                    Container(
+                      width: w,
+                      height: h,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/Bitmap.png"),
+                              fit: BoxFit.fill)),
+                    ),
+                    Container(
+                      width: w,
+                      height: h,
+                      decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage("assets/Rectangle.png"),
+                              fit: BoxFit.fill)),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: EdgeInsets.only(
                       top: h * 0.05, right: w * 0.02, left: w * 0.02),
                   child: InkWell(
-                    // onTap: () => Navigator.pop(context),
                     child: Align(
                       alignment: Alignment.topRight,
-                      child: Image.asset("assets/icons/Path-18.png"),
+                      child: Image.asset(
+                        "assets/icons/Path-18.png",
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 )

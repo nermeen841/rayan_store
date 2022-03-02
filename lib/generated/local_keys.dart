@@ -88,4 +88,13 @@ abstract class LocalKeys {
   static const EXIT_TITLE = "exit_title";
   static const YES = "yes";
   static const NO = "no";
+  static const DAYS = "days";
+  static const VALID_EMAIL = "valid_email";
+  static const VALID_PHONE = "valid_phone";
+  static const VALID = "valid";
+  static const ATTRIBUTES = "attribute";
+  static const REMOVE_CART = "remove_cart";
+  static const REMOVE_ITEM = "remove_item";
+  static const QTY = "qty";
+  static const NO_MORE_PRODUCT = "no_product_more";
 }

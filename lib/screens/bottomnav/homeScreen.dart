@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
               RaisedButton(
                 color: mainColor,
                 onPressed: () => Navigator.of(context).pop(true),
-                child: Text(LocalKeys.NO.tr()),
+                child: Text(LocalKeys.YES.tr()),
               ),
             ],
           ),

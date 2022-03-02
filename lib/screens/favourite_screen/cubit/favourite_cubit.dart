@@ -28,21 +28,20 @@ class FavouriteCubit extends Cubit<FavouriteState> {
       var response = await http
           .get(Uri.parse(EndPoints.WISHLIST), headers: {'auth-token': token});
       var data = jsonDecode(response.body);
-      if (data['status'] == 1) {
-        wishlistModel = WishlistModel.fromJson(data);
-        wishlistModel!.data!.forEach((element) {
-          isFavourite[int.parse(element.id!.toString())] = true;
-          emit(GetFavouriteSuccessState());
-        });
+      wishlistModel = WishlistModel.fromJson(data);
+      wishlistModel!.data!.forEach((element) {
+        isFavourite[int.parse(element.id!.toString())] = true;
         emit(GetFavouriteSuccessState());
-        return wishlistModel;
-      }
+      });
+      emit(GetFavouriteSuccessState());
+      return wishlistModel;
     } catch (error) {
       print("errrrrrrrrrrrrrrrrrror: " + error.toString());
       emit(GetFavouriteErrorState(error.toString()));
     }
   }
 
+///////////////////////////////////////////////////////////////////////////////////
   void addtowishlist({required String productId}) async {
     emit(AddFavouriteLoadingState());
     SharedPreferences pref = await SharedPreferences.getInstance();
