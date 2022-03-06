@@ -12,10 +12,7 @@ import 'package:rayan_store/app_cubit/appstate.dart';
 import 'package:rayan_store/componnent/constants.dart';
 import 'package:rayan_store/componnent/http_services.dart';
 import 'package:rayan_store/generated/local_keys.dart';
-
-import 'package:rayan_store/screens/cart/cart.dart';
 import 'package:rayan_store/screens/cart/cubit/cart_cubit.dart';
-import 'package:rayan_store/screens/favourite_screen/cubit/favourite_cubit.dart';
 import 'package:rayan_store/screens/product_detail/full_slider.dart';
 import 'package:rayan_store/screens/tabone_screen/cubit/home_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';

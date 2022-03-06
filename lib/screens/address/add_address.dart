@@ -2,7 +2,6 @@
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rayan_store/componnent/constants.dart';
 import 'package:rayan_store/generated/local_keys.dart';
@@ -133,12 +132,12 @@ class _AddressInfoState extends State<AddressInfo> {
                                         : index == 2
                                             ? TextInputType.number
                                             : TextInputType.text,
-                                inputFormatters: index != 0
-                                    ? null
-                                    : [
-                                        FilteringTextInputFormatter.allow(
-                                            RegExp(r"[0-9 a-z  @ .]")),
-                                      ],
+                                // inputFormatters: index != 0
+                                //     ? null
+                                //     : [
+                                //         FilteringTextInputFormatter.allow(
+                                //             RegExp(r"[0-9 a-z  @ .]")),
+                                //       ],
                                 maxLines: index == 5 || index == 4 ? 4 : 1,
                                 onEditingComplete: () {
                                   _listFocus[index].unfocus();

@@ -27,7 +27,8 @@ class _RayanCartBodyState extends State<RayanCartBody> {
       RayanCartBody.lang = preferences.getString('language').toString();
       RayanCartBody.currency = preferences.getString('currency').toString();
       DataBaseCubit.get(context).cart.forEach((element) {
-        RayanCartBody.finalPrice += element['productPrice'];
+        RayanCartBody.finalPrice +=
+            element['productPrice'] * element['productQty'];
       });
     });
   }

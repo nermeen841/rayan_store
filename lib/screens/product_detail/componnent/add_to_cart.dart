@@ -129,10 +129,9 @@ addtoCartHeader(
                                           .descriptionAr!,
                                       productQty: count,
                                       productPrice: HomeCubit.get(context)
-                                              .singleProductModel!
-                                              .data!
-                                              .price *
-                                          count,
+                                          .singleProductModel!
+                                          .data!
+                                          .price,
                                       productImg: HomeCubit.get(context)
                                           .singleProductModel!
                                           .data!

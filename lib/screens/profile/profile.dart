@@ -169,105 +169,105 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             UserLanguageSelection())),
                                 title: LocalKeys.LANG.tr(),
                                 image: "assets/icons/Group 16.png"),
-                            (isLogin)
-                                ? ProfileItem(
-                                    press: () {
-                                      homeBottomSheet(
-                                          context: context,
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                              children: [
-                                                SizedBox(
-                                                  height: h * 0.03,
-                                                ),
-                                                Center(
-                                                  child: Text(
-                                                    LocalKeys.DELIVERY_ADDRESS
-                                                        .tr(),
-                                                    style: TextStyle(
-                                                        fontFamily:
-                                                            (lang == 'en')
-                                                                ? 'Nunito'
-                                                                : 'Almarai',
-                                                        fontSize: w * 0.05,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        color: Colors.black),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  height: h * 0.02,
-                                                ),
-                                                BlocConsumer<AppCubit,
-                                                        AppCubitStates>(
-                                                    builder: (context, state) {
-                                                      return ListView.builder(
-                                                          primary: true,
-                                                          shrinkWrap: true,
-                                                          itemCount: 5,
-                                                          itemBuilder:
-                                                              (context, index) {
-                                                            return Padding(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          h * 0.02),
-                                                              child: Row(
-                                                                mainAxisAlignment:
-                                                                    MainAxisAlignment
-                                                                        .spaceBetween,
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: [
-                                                                  Radio(
-                                                                      activeColor:
-                                                                          mainColor,
-                                                                      value:
-                                                                          index,
-                                                                      groupValue:
-                                                                          AppCubit.get(context)
-                                                                              .addressselected,
-                                                                      onChanged:
-                                                                          (value) {
-                                                                        AppCubit.get(context).addressselected =
-                                                                            index;
-                                                                        AppCubit.get(context).addressSelection(
-                                                                            selected:
-                                                                                index);
-                                                                      }),
-                                                                  Text(
-                                                                      "kuwait , hawly ibn khaldon street, ",
-                                                                      style:
-                                                                          TextStyle(
-                                                                        fontFamily: (lang ==
-                                                                                'en')
-                                                                            ? 'Nunito'
-                                                                            : 'Almarai',
-                                                                        fontSize:
-                                                                            w * 0.04,
-                                                                        fontWeight:
-                                                                            FontWeight.w600,
-                                                                        color: Colors
-                                                                            .black,
-                                                                      )),
-                                                                ],
-                                                              ),
-                                                            );
-                                                          });
-                                                    },
-                                                    listener:
-                                                        (context, state) {}),
-                                                SizedBox(
-                                                  height: h * 0.03,
-                                                ),
-                                              ],
-                                            ),
-                                          ));
-                                    },
-                                    title: LocalKeys.MY_ADD.tr(),
-                                    image: "assets/icons/Group 17.png")
-                                : Container(),
+                            // (isLogin)
+                            //     ? ProfileItem(
+                            //         press: () {
+                            //           homeBottomSheet(
+                            //               context: context,
+                            //               child: SingleChildScrollView(
+                            //                 child: Column(
+                            //                   children: [
+                            //                     SizedBox(
+                            //                       height: h * 0.03,
+                            //                     ),
+                            //                     Center(
+                            //                       child: Text(
+                            //                         LocalKeys.DELIVERY_ADDRESS
+                            //                             .tr(),
+                            //                         style: TextStyle(
+                            //                             fontFamily:
+                            //                                 (lang == 'en')
+                            //                                     ? 'Nunito'
+                            //                                     : 'Almarai',
+                            //                             fontSize: w * 0.05,
+                            //                             fontWeight:
+                            //                                 FontWeight.bold,
+                            //                             color: Colors.black),
+                            //                       ),
+                            //                     ),
+                            //                 SizedBox(
+                            //                   height: h * 0.02,
+                            //                 ),
+                            //                 BlocConsumer<AppCubit,
+                            //                         AppCubitStates>(
+                            //                     builder: (context, state) {
+                            //                       return ListView.builder(
+                            //                           primary: true,
+                            //                           shrinkWrap: true,
+                            //                           itemCount: 5,
+                            //                           itemBuilder:
+                            //                               (context, index) {
+                            //                             return Padding(
+                            //                               padding: EdgeInsets
+                            //                                   .symmetric(
+                            //                                       horizontal:
+                            //                                           h * 0.02),
+                            //                               child: Row(
+                            //                                 mainAxisAlignment:
+                            //                                     MainAxisAlignment
+                            //                                         .spaceBetween,
+                            //                                 mainAxisSize:
+                            //                                     MainAxisSize
+                            //                                         .min,
+                            //                                 children: [
+                            //                                   Radio(
+                            //                                       activeColor:
+                            //                                           mainColor,
+                            //                                       value:
+                            //                                           index,
+                            //                                       groupValue:
+                            //                                           AppCubit.get(context)
+                            //                                               .addressselected,
+                            //                                       onChanged:
+                            //                                           (value) {
+                            //                                         AppCubit.get(context).addressselected =
+                            //                                             index;
+                            //                                         AppCubit.get(context).addressSelection(
+                            //                                             selected:
+                            //                                                 index);
+                            //                                       }),
+                            //                                   Text(
+                            //                                       "kuwait , hawly ibn khaldon street, ",
+                            //                                       style:
+                            //                                           TextStyle(
+                            //                                         fontFamily: (lang ==
+                            //                                                 'en')
+                            //                                             ? 'Nunito'
+                            //                                             : 'Almarai',
+                            //                                         fontSize:
+                            //                                             w * 0.04,
+                            //                                         fontWeight:
+                            //                                             FontWeight.w600,
+                            //                                         color: Colors
+                            //                                             .black,
+                            //                                       )),
+                            //                                 ],
+                            //                               ),
+                            //                             );
+                            //                           });
+                            //                     },
+                            //                     listener:
+                            //                         (context, state) {}),
+                            //                 SizedBox(
+                            //                   height: h * 0.03,
+                            //                 ),
+                            //               ],
+                            //             ),
+                            //           ));
+                            //     },
+                            //     title: LocalKeys.MY_ADD.tr(),
+                            //     image: "assets/icons/Group 17.png")
+                            // : Container(),
                             (isLogin)
                                 ? BlocConsumer<UserprofileCubit,
                                         UserprofileState>(
