@@ -146,7 +146,7 @@ class AuthcubitCubit extends Cubit<AuthcubitState> {
 
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       } else {
-        prefs.setString('token', data['access_token'].toString());
+        prefs.setString('token', data['token'].toString());
         UserprofileCubit().getUserProfile();
         controller.success();
         await Future.delayed(const Duration(seconds: 1));
