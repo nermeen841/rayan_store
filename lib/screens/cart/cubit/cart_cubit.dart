@@ -108,6 +108,7 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
+///////////////////////////////////////////////////////////////////////////////////
   DeliveryModel? deliveryModel;
   Future<DeliveryModel?> getDelivery({required BuildContext context}) async {
     emit(DeliveryLoadingState());

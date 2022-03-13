@@ -16,7 +16,6 @@ import 'package:rayan_store/screens/cart/cubit/cart_cubit.dart';
 import 'package:rayan_store/screens/product_detail/componnent/full_slider.dart';
 import 'package:rayan_store/screens/tabone_screen/cubit/home_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'componnent/add_to_cart.dart';
 
 class ProductDetail extends StatefulWidget {
